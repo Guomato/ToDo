@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">ToDo</string>
+    
+    <string name="nav_item_todo">ToDo</string>
+    <string name="nav_item_statistics">Statistics</string>
+
+    <string name="action_filtering">Filtering</string>
+    <string name="action_delete_all">Delete all</string>
+    <string name="action_delete_completed">Delete completed</string>
+
+    <string name="action_delete_task">Delete</string>
+
+    <string name="action_filtering_all">All</string>
+    <string name="action_filtering_completed">Completed</string>
+    <string name="action_filtering_active">Active</string>
+
+    <string name="title_hint">Title</string>
+    <string name="description_hint">Enter your TO-DO here.</string>
+
+    <string name="title_new_todo">New ToDo</string>
+    <string name="title_edit_todo">Edit ToDo</string>
+
+    <string name="tip_task_marked_completed">Task has been marked completed.</string>
+    <string name="tip_task_marked_active">Task has been marked active.</string>
+    <string name="tip_task_add_success">Task has been added successfully.</string>
+    <string name="tip_task_edit_success">Task has been edited successfully.</string>
+    <string name="tip_no_task">No task found.</string>
+    <string name="tip_empty_task_error">Title or description can not be empty.</string>
+
+    <string name="info_statistics_completed">Completed</string>
+    <string name="info_statistics_active">Active</string>
+</resources>
