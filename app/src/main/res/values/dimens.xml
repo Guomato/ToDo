@@ -8,4 +8,9 @@
 
     <dimen name="list_item_padding">8dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="card_horizontal_margin">8dp</dimen>
+    <dimen name="card_vertical_margin">4dp</dimen>
+    <dimen name="card_padding">8dp</dimen>
+    <dimen name="card_min_height">100dp</dimen>
 </resources>

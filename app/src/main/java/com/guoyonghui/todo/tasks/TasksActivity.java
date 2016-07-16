@@ -10,17 +10,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.guoyonghui.todo.BaseApplication;
 import com.guoyonghui.todo.R;
 import com.guoyonghui.todo.data.Task;
 import com.guoyonghui.todo.data.source.TasksRepository;
 import com.guoyonghui.todo.statistics.StatisticsActivity;
-
-import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Func1;
 
 public class TasksActivity extends AppCompatActivity {
 
@@ -34,13 +29,6 @@ public class TasksActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasks);
-
-        if(((BaseApplication) getApplication()).isFirstLoad()) {
-            TasksRepository repository = ((BaseApplication)getApplication()).getTasksRepository();
-            for(int i = 0; i < 50; i ++) {
-                repository.saveTask(new Task("#" + (i + 1), "test"));
-            }
-        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tasks_toolbar);
         setSupportActionBar(toolbar);

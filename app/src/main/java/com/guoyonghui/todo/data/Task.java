@@ -73,16 +73,12 @@ public class Task {
         mCompleted = completed;
     }
 
-    public String getTitleForList() {
-        return (mTitle != null && !"".equals(mTitle)) ? mTitle : mDescription;
-    }
-
     public boolean isActive() {
         return !mCompleted;
     }
 
     public boolean isEmpty() {
-        return (mTitle == null || mTitle.isEmpty()) && (mDescription == null || mDescription.isEmpty());
+        return (mTitle == null || mTitle.isEmpty()) || (mDescription == null || mDescription.isEmpty());
     }
 
     @Override

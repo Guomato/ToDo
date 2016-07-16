@@ -10,4 +10,6 @@
 
     <color name="column_color_completed">#FF4081</color>
     <color name="column_color_active">#FF5722</color>
+
+    <color name="divider_color">#DDDDDD</color>
 </resources>

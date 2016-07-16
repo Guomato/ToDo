@@ -6,7 +6,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,8 +36,6 @@ public class TasksFragment extends Fragment implements TasksContract.View {
 
     private TasksContract.Presenter mPresenter;
 
-    private TextView mFilteringLabelTextView;
-
     private TasksAdapter mTasksAdapter;
 
     public static TasksFragment newInstance() {
@@ -53,10 +55,9 @@ public class TasksFragment extends Fragment implements TasksContract.View {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_tasks, container, false);
 
-        ListView tasksListView = (ListView) rootView.findViewById(R.id.tasks_list);
-        tasksListView.setAdapter(mTasksAdapter);
-
-        mFilteringLabelTextView = (TextView) rootView.findViewById(R.id.filtering_label);
+        RecyclerView taskRecyclerView = (RecyclerView) rootView.findViewById(R.id.task_list);
+        taskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        taskRecyclerView.setAdapter(mTasksAdapter);
 
         FloatingActionButton addTaskButton = (FloatingActionButton) getActivity().findViewById(R.id.add_fab);
         addTaskButton.setOnClickListener(new View.OnClickListener() {
@@ -117,17 +118,26 @@ public class TasksFragment extends Fragment implements TasksContract.View {
 
     @Override
     public void showFilteringLabelAll() {
-        mFilteringLabelTextView.setText(R.string.action_filtering_all);
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setTitle(R.string.action_filtering_all);
+        }
     }
 
     @Override
     public void showFilteringLabelCompleted() {
-        mFilteringLabelTextView.setText(R.string.action_filtering_completed);
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setTitle(R.string.action_filtering_completed);
+        }
     }
 
     @Override
     public void showFilteringLabelActive() {
-        mFilteringLabelTextView.setText(R.string.action_filtering_active);
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setTitle(R.string.action_filtering_active);
+        }
     }
 
     @Override
@@ -219,7 +229,7 @@ public class TasksFragment extends Fragment implements TasksContract.View {
         }
     };
 
-    private class TasksAdapter extends BaseAdapter {
+    private class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private List<Task> mTasks;
 
@@ -230,7 +240,7 @@ public class TasksFragment extends Fragment implements TasksContract.View {
             mTaskItemListener = taskItemListener;
         }
 
-        public void setData(List<Task> tasks) {
+        private void setData(List<Task> tasks) {
             mTasks = tasks;
         }
 
@@ -240,43 +250,28 @@ public class TasksFragment extends Fragment implements TasksContract.View {
         }
 
         @Override
-        public int getCount() {
-            return mTasks.size();
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new TaskViewHolder(LayoutInflater.from(getActivity()).inflate(R.layout.task_item, parent, false));
         }
 
         @Override
-        public Object getItem(int i) {
-            return mTasks.get(i);
-        }
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            TaskViewHolder viewHolder = (TaskViewHolder) holder;
 
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
+            View rootView = viewHolder.root;
+            CheckBox complete = viewHolder.complete;
+            TextView title = viewHolder.title;
+            TextView description = viewHolder.description;
 
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            if (view == null) {
-                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.task_item, viewGroup, false);
-            }
+            final Task task = mTasks.get(position);
 
-            final Task task = (Task) getItem(i);
+            title.setText(task.getTitle());
+            description.setText(task.getDescription());
 
-            TextView titleTextView = (TextView) view.findViewById(R.id.title);
-            titleTextView.setText(task.getTitleForList());
-
-            CheckBox completeCheckBox = (CheckBox) view.findViewById(R.id.complete);
-            completeCheckBox.setChecked(task.isCompleted());
-
-            if (task.isCompleted()) {
-                view.setBackgroundResource(R.drawable.list_completed_touch_feedback);
-            } else {
-                view.setBackgroundResource(R.drawable.touch_feedback);
-            }
-
-            completeCheckBox.setOnClickListener(new View.OnClickListener() {
+            complete.setChecked(task.isCompleted());
+            complete.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View v) {
                     if (task.isCompleted()) {
                         mTaskItemListener.onActiveTaskClick(task);
                     } else {
@@ -285,16 +280,116 @@ public class TasksFragment extends Fragment implements TasksContract.View {
                 }
             });
 
-            view.setOnClickListener(new View.OnClickListener() {
+            rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View v) {
                     mTaskItemListener.onTaskClick(task);
                 }
             });
+        }
 
-            return view;
+        @Override
+        public int getItemCount() {
+            return mTasks.size();
+        }
+
+        class TaskViewHolder extends RecyclerView.ViewHolder {
+
+            View root;
+
+            CheckBox complete;
+
+            TextView title;
+
+            TextView description;
+
+            public TaskViewHolder(View itemView) {
+                super(itemView);
+
+                root = itemView;
+                complete = (CheckBox) root.findViewById(R.id.complete);
+                title = (TextView) root.findViewById(R.id.title);
+                description = (TextView) root.findViewById(R.id.description);
+            }
         }
     }
+
+//    private class TasksAdapter extends BaseAdapter {
+//
+//        private List<Task> mTasks;
+//
+//        private TaskItemListener mTaskItemListener;
+//
+//        public TasksAdapter(List<Task> tasks, TaskItemListener taskItemListener) {
+//            setData(tasks);
+//            mTaskItemListener = taskItemListener;
+//        }
+//
+//        public void setData(List<Task> tasks) {
+//            mTasks = tasks;
+//        }
+//
+//        public void replaceData(List<Task> tasks) {
+//            setData(tasks);
+//            notifyDataSetChanged();
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return mTasks.size();
+//        }
+//
+//        @Override
+//        public Object getItem(int i) {
+//            return mTasks.get(i);
+//        }
+//
+//        @Override
+//        public long getItemId(int i) {
+//            return i;
+//        }
+//
+//        @Override
+//        public View getView(int i, View view, ViewGroup viewGroup) {
+//            if (view == null) {
+//                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.task_item, viewGroup, false);
+//            }
+//
+//            final Task task = (Task) getItem(i);
+//
+//            TextView titleTextView = (TextView) view.findViewById(R.id.title);
+//            titleTextView.setText(task.getTitleForList());
+//
+//            CheckBox completeCheckBox = (CheckBox) view.findViewById(R.id.complete);
+//            completeCheckBox.setChecked(task.isCompleted());
+//
+//            if (task.isCompleted()) {
+//                view.setBackgroundResource(R.drawable.list_completed_touch_feedback);
+//            } else {
+//                view.setBackgroundResource(R.drawable.touch_feedback);
+//            }
+//
+//            completeCheckBox.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (task.isCompleted()) {
+//                        mTaskItemListener.onActiveTaskClick(task);
+//                    } else {
+//                        mTaskItemListener.onCompleteTaskClick(task);
+//                    }
+//                }
+//            });
+//
+//            view.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    mTaskItemListener.onTaskClick(task);
+//                }
+//            });
+//
+//            return view;
+//        }
+//    }
 
     private interface TaskItemListener {
 
