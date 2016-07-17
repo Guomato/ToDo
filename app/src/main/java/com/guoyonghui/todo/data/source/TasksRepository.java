@@ -3,10 +3,12 @@ package com.guoyonghui.todo.data.source;
 import com.guoyonghui.todo.data.Task;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class TasksRepository implements TasksDataSource {
 
@@ -15,6 +17,8 @@ public class TasksRepository implements TasksDataSource {
     private TasksDataSource mTasksLocalDataSource;
 
     private Map<String, Task> mCachedTasks;
+
+    private Set<TasksRepositoryObserver> mObservers = new HashSet<>();
 
     private TasksRepository(TasksDataSource tasksLocalDataSource) {
         mTasksLocalDataSource = tasksLocalDataSource;
@@ -28,34 +32,27 @@ public class TasksRepository implements TasksDataSource {
     }
 
     @Override
-    public void loadTasks(final LoadTasksCallback callback) {
-        if (mCachedTasks != null) {
-            callback.onTasksLoaded(new ArrayList<Task>(mCachedTasks.values()));
-            return;
+    public List<Task> loadTasks() {
+        List<Task> tasks;
+
+        if(cachedTasksAvailable()) {
+            return getCachedTasks();
         }
 
-        mTasksLocalDataSource.loadTasks(new LoadTasksCallback() {
-            @Override
-            public void onTasksLoaded(List<Task> tasks) {
-                refreshCache(tasks);
-                callback.onTasksLoaded(tasks);
-            }
+        tasks = mTasksLocalDataSource.loadTasks();
+        refreshCache(tasks);
 
-            @Override
-            public void onDataNotAvailable() {
-                callback.onDataNotAvailable();
-            }
-        });
+        return tasks;
     }
 
     @Override
-    public void getTask(String taskId, GetTaskCallback callback) {
-        if (mCachedTasks != null) {
-            callback.onTaskLoaded(mCachedTasks.get(taskId));
-            return;
+    public Task getTask(String taskId) {
+        Task cachedTask = mCachedTasks.get(taskId);
+        if(cachedTask != null){
+            return cachedTask;
         }
 
-        mTasksLocalDataSource.getTask(taskId, callback);
+        return mTasksLocalDataSource.getTask(taskId);
     }
 
     @Override
@@ -66,6 +63,8 @@ public class TasksRepository implements TasksDataSource {
             mCachedTasks = new LinkedHashMap<>();
         }
         mCachedTasks.put(task.getID(), task);
+
+        notifyObservers();
     }
 
     @Override
@@ -73,6 +72,8 @@ public class TasksRepository implements TasksDataSource {
         mTasksLocalDataSource.updateTask(task);
 
         mCachedTasks.put(task.getID(), task);
+
+        notifyObservers();
     }
 
     @Override
@@ -81,6 +82,8 @@ public class TasksRepository implements TasksDataSource {
 
         task.setCompleted(true);
         mCachedTasks.put(task.getID(), task);
+
+        notifyObservers();
     }
 
     @Override
@@ -94,6 +97,8 @@ public class TasksRepository implements TasksDataSource {
 
         task.setCompleted(false);
         mCachedTasks.put(task.getID(), task);
+
+        notifyObservers();
     }
 
     @Override
@@ -106,6 +111,8 @@ public class TasksRepository implements TasksDataSource {
         mTasksLocalDataSource.deleteTask(taskId);
 
         mCachedTasks.remove(taskId);
+
+        notifyObservers();
     }
 
     @Override
@@ -122,6 +129,8 @@ public class TasksRepository implements TasksDataSource {
                 iterator.remove();
             }
         }
+
+        notifyObservers();
     }
 
     @Override
@@ -132,6 +141,20 @@ public class TasksRepository implements TasksDataSource {
             mCachedTasks = new LinkedHashMap<>();
         }
         mCachedTasks.clear();
+
+        notifyObservers();
+    }
+
+    public boolean cachedTasksAvailable() {
+        return mCachedTasks != null;
+    }
+
+    public List<Task> getCachedTasks() {
+        return new ArrayList<>(mCachedTasks.values());
+    }
+
+    public Task getCachedTask(String taskId) {
+        return mCachedTasks.get(taskId);
     }
 
     private void refreshCache(List<Task> tasks) {
@@ -148,4 +171,27 @@ public class TasksRepository implements TasksDataSource {
     private Task getTaskWithId(String taskId) {
         return (mCachedTasks == null) ? null : mCachedTasks.get(taskId);
     }
+
+    interface TasksRepositoryObserver {
+
+        void onDataChanged();
+
+    }
+
+    public void registerTasksRepositoryObserver(TasksRepositoryObserver observer) {
+        mObservers.add(observer);
+    }
+
+    public void unregisterTasksRepositoryObserver(TasksRepositoryObserver observer) {
+        if(mObservers.contains(observer)) {
+            mObservers.remove(observer);
+        }
+    }
+
+    private void notifyObservers() {
+        for(TasksRepositoryObserver observer: mObservers) {
+            observer.onDataChanged();
+        }
+    }
+
 }

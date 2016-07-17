@@ -3,7 +3,6 @@ package com.guoyonghui.todo.data.source.local;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.guoyonghui.todo.data.Task;
@@ -30,7 +29,7 @@ public class TasksLocalDataSource implements TasksDataSource {
     }
 
     @Override
-    public void loadTasks(LoadTasksCallback callback) {
+    public List<Task> loadTasks() {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         List<Task> tasks = new ArrayList<>();
 
@@ -58,15 +57,11 @@ public class TasksLocalDataSource implements TasksDataSource {
         }
         db.close();
 
-        if (tasks.isEmpty()) {
-            callback.onDataNotAvailable();
-        } else {
-            callback.onTasksLoaded(tasks);
-        }
+        return tasks;
     }
 
     @Override
-    public void getTask(String taskId, GetTaskCallback callback) {
+    public Task getTask(String taskId) {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         Task task = null;
 
@@ -94,11 +89,7 @@ public class TasksLocalDataSource implements TasksDataSource {
         }
         db.close();
 
-        if (task == null) {
-            callback.onDataNotAvailable();
-        } else {
-            callback.onTaskLoaded(task);
-        }
+        return task;
     }
 
     @Override

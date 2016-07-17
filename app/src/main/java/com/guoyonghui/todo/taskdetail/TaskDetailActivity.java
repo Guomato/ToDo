@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 
 import com.guoyonghui.todo.R;
 import com.guoyonghui.todo.BaseApplication;
+import com.guoyonghui.todo.data.source.TaskLoader;
+import com.guoyonghui.todo.data.source.TasksRepository;
 
 public class TaskDetailActivity extends AppCompatActivity {
 
@@ -36,7 +38,9 @@ public class TaskDetailActivity extends AppCompatActivity {
                     .commit();
         }
 
-        new TaskDetailPresenter(taskId, ((BaseApplication) getApplication()).getTasksRepository(), taskDetailFragment);
+        TasksRepository tasksRepository = ((BaseApplication) getApplication()).getTasksRepository();
+        TaskLoader taskLoader = new TaskLoader(this, tasksRepository, taskId);
+        new TaskDetailPresenter(taskId, tasksRepository, taskDetailFragment, getSupportLoaderManager(), taskLoader);
     }
 
     @Override

@@ -8,6 +8,10 @@ import android.support.v7.widget.Toolbar;
 
 import com.guoyonghui.todo.R;
 import com.guoyonghui.todo.BaseApplication;
+import com.guoyonghui.todo.data.Task;
+import com.guoyonghui.todo.data.source.TaskLoader;
+import com.guoyonghui.todo.data.source.TasksLoader;
+import com.guoyonghui.todo.data.source.TasksRepository;
 
 public class AddEditTaskActivity extends AppCompatActivity {
 
@@ -41,7 +45,9 @@ public class AddEditTaskActivity extends AppCompatActivity {
                     .commit();
         }
 
-        new AddEditTaskPresenter(taskId, ((BaseApplication) getApplication()).getTasksRepository(), addEditTaskFragment);
+        TasksRepository tasksRepository = ((BaseApplication)getApplication()).getTasksRepository();
+        TaskLoader taskLoader = new TaskLoader(this, tasksRepository, taskId);
+        new AddEditTaskPresenter(taskId, tasksRepository, addEditTaskFragment, getSupportLoaderManager(), taskLoader);
     }
 
     @Override

@@ -13,6 +13,8 @@ public interface StatisticsContract {
 
         void showStatistics(int completed, int active);
 
+        void showLoadingIndicator(boolean show);
+
     }
 
 }

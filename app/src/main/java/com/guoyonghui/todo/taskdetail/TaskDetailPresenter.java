@@ -1,11 +1,17 @@
 package com.guoyonghui.todo.taskdetail;
 
 import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 
 import com.guoyonghui.todo.data.Task;
+import com.guoyonghui.todo.data.source.TaskLoader;
 import com.guoyonghui.todo.data.source.TasksDataSource;
 
-public class TaskDetailPresenter implements TaskDetailContract.Presenter {
+public class TaskDetailPresenter implements TaskDetailContract.Presenter, LoaderManager.LoaderCallbacks<Task> {
+
+    private static final int TASK_QUERY = 2;
 
     private String mTaskId;
 
@@ -13,17 +19,42 @@ public class TaskDetailPresenter implements TaskDetailContract.Presenter {
 
     private TaskDetailContract.View mTaskDetailView;
 
-    public TaskDetailPresenter(String taskId, TasksDataSource tasksRepository, TaskDetailContract.View taskDetailView) {
+    private LoaderManager mLoaderManager;
+
+    private TaskLoader mTaskLoader;
+
+    public TaskDetailPresenter(String taskId, TasksDataSource tasksRepository, TaskDetailContract.View taskDetailView, LoaderManager loaderManager, TaskLoader taskLoader) {
         mTaskId = taskId;
         mTasksRepository = tasksRepository;
         mTaskDetailView = taskDetailView;
+        mLoaderManager = loaderManager;
+        mTaskLoader = taskLoader;
 
         mTaskDetailView.setPresenter(this);
     }
 
     @Override
+    public Loader<Task> onCreateLoader(int id, Bundle args) {
+        return mTaskLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Task> loader, Task data) {
+        if (data != null) {
+            showTask(data);
+        } else {
+            mTaskDetailView.showNoTask();
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Task> loader) {
+
+    }
+
+    @Override
     public void start() {
-        getTask();
+        mLoaderManager.initLoader(TASK_QUERY, null, this);
     }
 
     @Override
@@ -51,44 +82,18 @@ public class TaskDetailPresenter implements TaskDetailContract.Presenter {
 
     @Override
     public void result(int requestCode, int resultCode) {
-        if(requestCode == TaskDetailFragment.REQUEST_EDIT_TASK) {
-            if(resultCode == Activity.RESULT_OK) {
+        if (requestCode == TaskDetailFragment.REQUEST_EDIT_TASK) {
+            if (resultCode == Activity.RESULT_OK) {
                 mTaskDetailView.showSuccessfullyEditTask();
             }
         }
-    }
-
-    private void getTask() {
-        if(mTaskId == null || mTaskId.isEmpty()) {
-            mTaskDetailView.showNoTask();
-            return;
-        }
-
-        mTasksRepository.getTask(mTaskId, new TasksDataSource.GetTaskCallback() {
-            @Override
-            public void onTaskLoaded(Task task) {
-                if(!mTaskDetailView.isActive()) {
-                    return;
-                }
-
-                showTask(task);
-            }
-
-            @Override
-            public void onDataNotAvailable() {
-                if(!mTaskDetailView.isActive()) {
-                    return;
-                }
-                mTaskDetailView.showNoTask();
-            }
-        });
     }
 
     private void showTask(Task task) {
         String title = task.getTitle();
         String description = task.getDescription();
 
-        if(title == null || title.isEmpty()) {
+        if (title == null || title.isEmpty()) {
             mTaskDetailView.hideTitle();
         } else {
             mTaskDetailView.showTitle(title);

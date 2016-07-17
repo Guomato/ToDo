@@ -29,4 +29,6 @@
 
     <string name="info_statistics_completed">Completed</string>
     <string name="info_statistics_active">Active</string>
+
+    <string name="loading_indicator">Loading tasks</string>
 </resources>

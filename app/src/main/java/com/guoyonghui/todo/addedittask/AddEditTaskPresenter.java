@@ -1,10 +1,18 @@
 package com.guoyonghui.todo.addedittask;
 
+import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+
 import com.guoyonghui.todo.data.Task;
+import com.guoyonghui.todo.data.source.TaskLoader;
 import com.guoyonghui.todo.data.source.TasksDataSource;
+import com.guoyonghui.todo.data.source.TasksLoader;
 import com.guoyonghui.todo.data.source.TasksRepository;
 
-public class AddEditTaskPresenter implements AddEditTaskContract.Presenter {
+public class AddEditTaskPresenter implements AddEditTaskContract.Presenter, LoaderManager.LoaderCallbacks<Task> {
+
+    private static final int TASK_QUERY = 1;
 
     private String mTaskId;
 
@@ -12,18 +20,41 @@ public class AddEditTaskPresenter implements AddEditTaskContract.Presenter {
 
     private AddEditTaskContract.View mAddEditTaskView;
 
-    public AddEditTaskPresenter(String taskId, TasksRepository tasksRepository, AddEditTaskContract.View addEditTaskView) {
+    private LoaderManager mLoaderManager;
+
+    private TaskLoader mTaskLoader;
+
+    public AddEditTaskPresenter(String taskId, TasksRepository tasksRepository, AddEditTaskContract.View addEditTaskView, LoaderManager loaderManager, TaskLoader taskLoader) {
         mTaskId = taskId;
         mTasksRepository = tasksRepository;
         mAddEditTaskView = addEditTaskView;
+        mLoaderManager = loaderManager;
+        mTaskLoader = taskLoader;
 
         mAddEditTaskView.setPresenter(this);
     }
 
     @Override
+    public Loader<Task> onCreateLoader(int id, Bundle args) {
+        return mTaskLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Task> loader, Task data) {
+        if(data != null) {
+            showTask(data);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Task> loader) {
+
+    }
+
+    @Override
     public void start() {
         if (!isNewTask()) {
-            getTask();
+            mLoaderManager.initLoader(TASK_QUERY, null, this);
         }
     }
 
@@ -56,32 +87,7 @@ public class AddEditTaskPresenter implements AddEditTaskContract.Presenter {
     private boolean isNewTask() {
         return mTaskId == null || mTaskId.isEmpty();
     }
-    
-    private void getTask() {
-        if(isNewTask()) {
-            mAddEditTaskView.showNoTask();
-            return;
-        }
 
-        mTasksRepository.getTask(mTaskId, new TasksDataSource.GetTaskCallback() {
-            @Override
-            public void onTaskLoaded(Task task) {
-                if(!mAddEditTaskView.isActive()) {
-                    return;
-                }
-
-                showTask(task);
-            }
-
-            @Override
-            public void onDataNotAvailable() {
-                if(!mAddEditTaskView.isActive()) {
-                    return;
-                }
-                mAddEditTaskView.showNoTask();
-            }
-        });
-    }
 
     private void showTask(Task task) {
         mAddEditTaskView.showTitle(task.getTitle());

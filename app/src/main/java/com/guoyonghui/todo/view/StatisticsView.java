@@ -91,8 +91,8 @@ public class StatisticsView extends View {
         int bottom = getHeight() * 3 / 4;
 
         int unitWidth = viewWidth / size;
-        int unitHeight = checkUnitHeight();
-        
+        float unitHeight = checkUnitHeight();
+
         int baseline;
 
         checkUnitHeight();
@@ -101,9 +101,12 @@ public class StatisticsView extends View {
         Paint.FontMetricsInt fmi = mPaint.getFontMetricsInt();
 
         for (int i = 0; i < size; i++) {
+            int columnHeight = (int) (mValues.get(i) * unitHeight);
+            columnHeight = (columnHeight < COLUMN_MIN_HEIGHT) ? COLUMN_MIN_HEIGHT : columnHeight;
+
             int left = i * unitWidth + HORIZONTAL_DISTANCE / 2;
             int right = (i + 1) * unitWidth - HORIZONTAL_DISTANCE / 2;
-            int top = bottom - (mValues.get(i) == 0 ? COLUMN_MIN_HEIGHT : mValues.get(i) * unitHeight);
+            int top = bottom - columnHeight;
 
             //绘制柱形图
             mRect.set(left, top, right, bottom);
@@ -126,8 +129,8 @@ public class StatisticsView extends View {
         }
     }
 
-    private int checkUnitHeight() {
-        int max = mValues.get(0);
+    private float checkUnitHeight() {
+        float max = mValues.get(0);
         for (int value : mValues) {
             max = max < value ? value : max;
         }
@@ -173,14 +176,6 @@ public class StatisticsView extends View {
         private ArrayList<Integer> mValues;
 
         private ArrayList<Integer> mColors;
-
-        public Category(ArrayList<Integer> colors) {
-            mColors = new ArrayList<>();
-            mColors.addAll(colors);
-
-            mTitles = new ArrayList<>();
-            mValues = new ArrayList<>();
-        }
 
         public Category(int... colors) {
             mTitles = new ArrayList<>();

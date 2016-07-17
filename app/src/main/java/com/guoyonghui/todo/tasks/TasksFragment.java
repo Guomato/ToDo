@@ -1,5 +1,7 @@
 package com.guoyonghui.todo.tasks;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,6 +23,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.guoyonghui.todo.R;
 import com.guoyonghui.todo.addedittask.AddEditTaskActivity;
@@ -38,6 +41,8 @@ public class TasksFragment extends Fragment implements TasksContract.View {
 
     private TasksAdapter mTasksAdapter;
 
+    private ProgressDialog mProgressDialog;
+
     public static TasksFragment newInstance() {
         return new TasksFragment();
     }
@@ -48,6 +53,11 @@ public class TasksFragment extends Fragment implements TasksContract.View {
         setHasOptionsMenu(true);
 
         mTasksAdapter = new TasksAdapter(new ArrayList<Task>(), mTaskItemListener);
+
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setMessage(getString(R.string.loading_indicator));
+        mProgressDialog.setIndeterminate(false);
+        mProgressDialog.setCancelable(false);
     }
 
     @Nullable
@@ -107,6 +117,15 @@ public class TasksFragment extends Fragment implements TasksContract.View {
     }
 
     @Override
+    public void showLoadingIndicator(boolean show) {
+        if (show) {
+            mProgressDialog.show();
+        } else {
+            mProgressDialog.cancel();
+        }
+    }
+
+    @Override
     public void showTasks(List<Task> tasks) {
         mTasksAdapter.replaceData(tasks);
     }
@@ -119,7 +138,7 @@ public class TasksFragment extends Fragment implements TasksContract.View {
     @Override
     public void showFilteringLabelAll() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if(actionBar != null) {
+        if (actionBar != null) {
             actionBar.setTitle(R.string.action_filtering_all);
         }
     }
@@ -127,7 +146,7 @@ public class TasksFragment extends Fragment implements TasksContract.View {
     @Override
     public void showFilteringLabelCompleted() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if(actionBar != null) {
+        if (actionBar != null) {
             actionBar.setTitle(R.string.action_filtering_completed);
         }
     }
@@ -135,7 +154,7 @@ public class TasksFragment extends Fragment implements TasksContract.View {
     @Override
     public void showFilteringLabelActive() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if(actionBar != null) {
+        if (actionBar != null) {
             actionBar.setTitle(R.string.action_filtering_active);
         }
     }

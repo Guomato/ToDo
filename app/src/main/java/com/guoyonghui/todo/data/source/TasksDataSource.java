@@ -6,25 +6,25 @@ import java.util.List;
 
 public interface TasksDataSource {
 
-    interface LoadTasksCallback {
+//    interface LoadTasksCallback {
+//
+//        void onTasksLoaded(List<Task> tasks);
+//
+//        void onDataNotAvailable();
+//
+//    }
+//
+//    interface GetTaskCallback {
+//
+//        void onTaskLoaded(Task task);
+//
+//        void onDataNotAvailable();
+//
+//    }
 
-        void onTasksLoaded(List<Task> tasks);
+    List<Task> loadTasks();
 
-        void onDataNotAvailable();
-
-    }
-
-    interface GetTaskCallback {
-
-        void onTaskLoaded(Task task);
-
-        void onDataNotAvailable();
-
-    }
-
-    void loadTasks(LoadTasksCallback callback);
-
-    void getTask(String taskId, GetTaskCallback callback);
+    Task getTask(String taskId);
 
     void saveTask(Task task);
 

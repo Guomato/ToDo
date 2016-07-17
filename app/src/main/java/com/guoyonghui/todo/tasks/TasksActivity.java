@@ -13,7 +13,7 @@ import android.view.MenuItem;
 
 import com.guoyonghui.todo.BaseApplication;
 import com.guoyonghui.todo.R;
-import com.guoyonghui.todo.data.Task;
+import com.guoyonghui.todo.data.source.TasksLoader;
 import com.guoyonghui.todo.data.source.TasksRepository;
 import com.guoyonghui.todo.statistics.StatisticsActivity;
 
@@ -52,7 +52,10 @@ public class TasksActivity extends AppCompatActivity {
                     .commit();
         }
 
-        mPresenter = new TasksPresenter(((BaseApplication) getApplication()).getTasksRepository(), tasksFragment);
+        TasksRepository tasksRepository = ((BaseApplication)getApplication()).getTasksRepository();
+        TasksLoader tasksLoader = new TasksLoader(this, tasksRepository);
+
+        mPresenter = new TasksPresenter(tasksRepository, tasksFragment, getSupportLoaderManager(), tasksLoader);
 
         if (savedInstanceState != null) {
             TasksFilterType filterType = (TasksFilterType) savedInstanceState.getSerializable(CURRENT_FILTERING_KEY);

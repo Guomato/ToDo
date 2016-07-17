@@ -58,6 +58,8 @@ public interface TasksContract {
 
         void showSuccessfullyAddTask();
 
+        void showLoadingIndicator(boolean show);
+
     }
 
 }

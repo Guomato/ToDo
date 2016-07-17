@@ -1,5 +1,6 @@
 package com.guoyonghui.todo.statistics;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,8 +18,20 @@ public class StatisticsFragment extends Fragment implements StatisticsContract.V
 
     private StatisticsView mStatisticsView;
 
+    private ProgressDialog mProgressDialog;
+
     public static StatisticsFragment newInstance() {
         return new StatisticsFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setMessage(getString(R.string.loading_indicator));
+        mProgressDialog.setIndeterminate(false);
+        mProgressDialog.setCancelable(false);
     }
 
     @Nullable
@@ -41,6 +54,15 @@ public class StatisticsFragment extends Fragment implements StatisticsContract.V
     @Override
     public void setPresenter(StatisticsContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public void showLoadingIndicator(boolean show) {
+        if (show) {
+            mProgressDialog.show();
+        } else {
+            mProgressDialog.cancel();
+        }
     }
 
     @Override

@@ -13,6 +13,8 @@ import android.view.MenuItem;
 
 import com.guoyonghui.todo.R;
 import com.guoyonghui.todo.BaseApplication;
+import com.guoyonghui.todo.data.source.TasksLoader;
+import com.guoyonghui.todo.data.source.TasksRepository;
 import com.guoyonghui.todo.tasks.TasksActivity;
 
 public class StatisticsActivity extends AppCompatActivity {
@@ -30,6 +32,7 @@ public class StatisticsActivity extends AppCompatActivity {
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+            actionBar.setTitle(R.string.nav_item_statistics);
         }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.statistics_drawer_layout);
@@ -46,7 +49,9 @@ public class StatisticsActivity extends AppCompatActivity {
                     .commit();
         }
 
-        new StatisticsPresenter(((BaseApplication) getApplication()).getTasksRepository(), statisticsFragment);
+        TasksRepository tasksRepository = ((BaseApplication)getApplication()).getTasksRepository();
+        TasksLoader tasksLoader = new TasksLoader(this, tasksRepository);
+        new StatisticsPresenter(tasksRepository, statisticsFragment, getSupportLoaderManager(), tasksLoader);
     }
 
     @Override
