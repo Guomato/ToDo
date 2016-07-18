@@ -15,8 +15,8 @@ import java.util.List;
 
 public class TasksPresenter implements TasksContract.Presenter, LoaderManager.LoaderCallbacks<List<Task>> {
 
-    private static final int TASKS_QUERY = 0; 
-    
+    private static final int TASKS_QUERY = 0;
+
     private TasksDataSource mTasksRepository;
 
     private TasksContract.View mTasksView;
@@ -51,7 +51,7 @@ public class TasksPresenter implements TasksContract.Presenter, LoaderManager.Lo
 
         mTasksView.showLoadingIndicator(false);
 
-        if(data == null) {
+        if (data == null) {
             mTasksView.showNoTasks();
         } else {
             showFilteredTasks();
@@ -60,7 +60,7 @@ public class TasksPresenter implements TasksContract.Presenter, LoaderManager.Lo
 
     @Override
     public void onLoaderReset(Loader<List<Task>> loader) {
-            
+
     }
 
     @Override

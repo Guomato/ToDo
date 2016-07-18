@@ -35,7 +35,7 @@ public class TasksRepository implements TasksDataSource {
     public List<Task> loadTasks() {
         List<Task> tasks;
 
-        if(cachedTasksAvailable()) {
+        if (cachedTasksAvailable()) {
             return getCachedTasks();
         }
 
@@ -48,7 +48,7 @@ public class TasksRepository implements TasksDataSource {
     @Override
     public Task getTask(String taskId) {
         Task cachedTask = mCachedTasks.get(taskId);
-        if(cachedTask != null){
+        if (cachedTask != null) {
             return cachedTask;
         }
 
@@ -183,13 +183,13 @@ public class TasksRepository implements TasksDataSource {
     }
 
     public void unregisterTasksRepositoryObserver(TasksRepositoryObserver observer) {
-        if(mObservers.contains(observer)) {
+        if (mObservers.contains(observer)) {
             mObservers.remove(observer);
         }
     }
 
     private void notifyObservers() {
-        for(TasksRepositoryObserver observer: mObservers) {
+        for (TasksRepositoryObserver observer : mObservers) {
             observer.onDataChanged();
         }
     }

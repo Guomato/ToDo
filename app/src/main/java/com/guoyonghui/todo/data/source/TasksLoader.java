@@ -23,37 +23,33 @@ public class TasksLoader extends AsyncTaskLoader<List<Task>> implements TasksRep
     public void deliverResult(List<Task> data) {
         Log.d(TAG, "deliverResult");
 
-        if(isReset()) {
+        if (isReset()) {
             return;
         }
 
-        if(isStarted()) {
+        if (isStarted()) {
             super.deliverResult(data);
         }
     }
 
     @Override
     protected void onStartLoading() {
-        Log.d(TAG, Thread.currentThread().getName());
+        Log.d(TAG, "onStartLoading, cache is available: " + mTasksRepository.cachedTasksAvailable());
 
-        Log.d(TAG, "cache available: " + mTasksRepository.cachedTasksAvailable());
-
-        Log.d(TAG, "onStartLoading");
-
-        if(mTasksRepository.cachedTasksAvailable()) {
+        if (mTasksRepository.cachedTasksAvailable()) {
             deliverResult(mTasksRepository.getCachedTasks());
         }
 
         mTasksRepository.registerTasksRepositoryObserver(this);
 
-        if(takeContentChanged() || !mTasksRepository.cachedTasksAvailable()) {
+        if (takeContentChanged() || !mTasksRepository.cachedTasksAvailable()) {
             forceLoad();
         }
     }
 
     @Override
     public List<Task> loadInBackground() {
-        Log.d(TAG, "loadInBackground");
+        Log.d(TAG, "loadInBackground, load tasks from repository");
 
         return mTasksRepository.loadTasks();
     }
@@ -73,10 +69,17 @@ public class TasksLoader extends AsyncTaskLoader<List<Task>> implements TasksRep
     }
 
     @Override
-    public void onDataChanged() {
-        Log.d(TAG, "onDataChanged");
+    protected void onForceLoad() {
+        super.onForceLoad();
 
-        if(isStarted()) {
+        Log.d(TAG, "onForceLoad");
+    }
+
+    @Override
+    public void onDataChanged() {
+        Log.d(TAG, "onDataChanged, loader is started: " + isStarted());
+
+        if (isStarted()) {
             forceLoad();
         }
     }
