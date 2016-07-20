@@ -23,6 +23,8 @@ public class TaskDetailPresenter implements TaskDetailContract.Presenter, Loader
 
     private TaskLoader mTaskLoader;
 
+    private Task mTask;
+
     public TaskDetailPresenter(String taskId, TasksDataSource tasksRepository, TaskDetailContract.View taskDetailView, LoaderManager loaderManager, TaskLoader taskLoader) {
         mTaskId = taskId;
         mTasksRepository = tasksRepository;
@@ -40,6 +42,8 @@ public class TaskDetailPresenter implements TaskDetailContract.Presenter, Loader
 
     @Override
     public void onLoadFinished(Loader<Task> loader, Task data) {
+        mTask = data;
+
         if (data != null) {
             showTask(data);
         } else {
@@ -60,18 +64,24 @@ public class TaskDetailPresenter implements TaskDetailContract.Presenter, Loader
     @Override
     public void completeTask(String taskId) {
         mTasksRepository.completeTask(taskId);
+
+        mTaskDetailView.cancelAlarm(mTask);
         mTaskDetailView.showTaskMarkedCompleted();
     }
 
     @Override
     public void activeTask(String taskId) {
         mTasksRepository.activeTask(taskId);
+
+        mTaskDetailView.setAlarm(mTask);
         mTaskDetailView.showTaskMarkedActive();
     }
 
     @Override
     public void deleteTask(String taskId) {
         mTasksRepository.deleteTask(taskId);
+
+        mTaskDetailView.cancelAlarm(mTask);
         mTaskDetailView.showTaskDeleted();
     }
 

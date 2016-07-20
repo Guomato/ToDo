@@ -47,7 +47,7 @@ public class TasksRepository implements TasksDataSource {
 
     @Override
     public Task getTask(String taskId) {
-        Task cachedTask = mCachedTasks.get(taskId);
+        Task cachedTask = mCachedTasks == null ? null : mCachedTasks.get(taskId);
         if (cachedTask != null) {
             return cachedTask;
         }
@@ -59,9 +59,6 @@ public class TasksRepository implements TasksDataSource {
     public void saveTask(Task task) {
         mTasksLocalDataSource.saveTask(task);
 
-        if (mCachedTasks == null) {
-            mCachedTasks = new LinkedHashMap<>();
-        }
         mCachedTasks.put(task.getID(), task);
 
         notifyObservers();
@@ -81,6 +78,7 @@ public class TasksRepository implements TasksDataSource {
         mTasksLocalDataSource.completeTask(task);
 
         task.setCompleted(true);
+
         mCachedTasks.put(task.getID(), task);
 
         notifyObservers();
@@ -96,6 +94,7 @@ public class TasksRepository implements TasksDataSource {
         mTasksLocalDataSource.activeTask(task);
 
         task.setCompleted(false);
+
         mCachedTasks.put(task.getID(), task);
 
         notifyObservers();
@@ -103,13 +102,16 @@ public class TasksRepository implements TasksDataSource {
 
     @Override
     public void activeTask(String taskId) {
-        activeTask(getTaskWithId(taskId));
+        completeTask(getTaskWithId(taskId));
     }
 
     @Override
     public void deleteTask(String taskId) {
         mTasksLocalDataSource.deleteTask(taskId);
 
+        if (mCachedTasks == null) {
+            refreshCache();
+        }
         mCachedTasks.remove(taskId);
 
         notifyObservers();
@@ -119,9 +121,6 @@ public class TasksRepository implements TasksDataSource {
     public void deleteCompletedTasks() {
         mTasksLocalDataSource.deleteCompletedTasks();
 
-        if (mCachedTasks == null) {
-            mCachedTasks = new LinkedHashMap<>();
-        }
         Iterator<Map.Entry<String, Task>> iterator = mCachedTasks.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, Task> entry = iterator.next();
@@ -137,9 +136,6 @@ public class TasksRepository implements TasksDataSource {
     public void deleteAllTasks() {
         mTasksLocalDataSource.deleteAllTasks();
 
-        if (mCachedTasks == null) {
-            mCachedTasks = new LinkedHashMap<>();
-        }
         mCachedTasks.clear();
 
         notifyObservers();
@@ -168,8 +164,15 @@ public class TasksRepository implements TasksDataSource {
         }
     }
 
+    private void refreshCache() {
+        refreshCache(mTasksLocalDataSource.loadTasks());
+    }
+
     private Task getTaskWithId(String taskId) {
-        return (mCachedTasks == null) ? null : mCachedTasks.get(taskId);
+        if (mCachedTasks == null) {
+            refreshCache();
+        }
+        return mCachedTasks.get(taskId);
     }
 
     interface TasksRepositoryObserver {

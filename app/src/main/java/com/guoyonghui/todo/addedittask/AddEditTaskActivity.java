@@ -23,14 +23,14 @@ public class AddEditTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_edit_task);
 
         String taskId = null;
-        if(getIntent().hasExtra(EXTRA_TASK_ID)) {
+        if (getIntent().hasExtra(EXTRA_TASK_ID)) {
             taskId = getIntent().getStringExtra(EXTRA_TASK_ID);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.add_edit_task_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setTitle(taskId == null ? R.string.title_new_todo : R.string.title_edit_todo);
@@ -38,14 +38,14 @@ public class AddEditTaskActivity extends AppCompatActivity {
 
 
         AddEditTaskFragment addEditTaskFragment = (AddEditTaskFragment) getSupportFragmentManager().findFragmentById(R.id.add_edit_task_fragment_container);
-        if(addEditTaskFragment == null) {
+        if (addEditTaskFragment == null) {
             addEditTaskFragment = AddEditTaskFragment.newInstance();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.add_edit_task_fragment_container, addEditTaskFragment)
                     .commit();
         }
 
-        TasksRepository tasksRepository = ((BaseApplication)getApplication()).getTasksRepository();
+        TasksRepository tasksRepository = ((BaseApplication) getApplication()).getTasksRepository();
         TaskLoader taskLoader = new TaskLoader(this, tasksRepository, taskId);
         new AddEditTaskPresenter(taskId, tasksRepository, addEditTaskFragment, getSupportLoaderManager(), taskLoader);
     }

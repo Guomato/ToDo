@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 
 import com.guoyonghui.todo.R;
+import com.guoyonghui.todo.alarm.AlarmReceiver;
+import com.guoyonghui.todo.data.Task;
 import com.guoyonghui.todo.util.CalendarFormatHelper;
 
 import java.util.Calendar;
@@ -150,6 +152,11 @@ public class AddEditTaskFragment extends Fragment implements AddEditTaskContract
     }
 
     @Override
+    public void setAlarm(Task task) {
+        AlarmReceiver.setAlarm(getActivity(), task);
+    }
+
+    @Override
     public boolean isActive() {
         return isAdded();
     }
@@ -171,4 +178,5 @@ public class AddEditTaskFragment extends Fragment implements AddEditTaskContract
     private void showMessage(int msgResId) {
         Snackbar.make(getView(), msgResId, Snackbar.LENGTH_SHORT).show();
     }
+
 }

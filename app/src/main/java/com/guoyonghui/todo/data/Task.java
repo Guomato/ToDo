@@ -1,9 +1,10 @@
 package com.guoyonghui.todo.data;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.UUID;
 
-public class Task {
+public class Task implements Serializable {
 
     private String mID;
 

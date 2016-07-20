@@ -112,6 +112,8 @@ public class TasksPresenter implements TasksContract.Presenter, LoaderManager.Lo
     @Override
     public void completeTask(Task task) {
         mTasksRepository.completeTask(task);
+
+        mTasksView.cancelAlarm(task);
         mTasksView.showTaskMarkedCompleted();
         loadTasks();
     }
@@ -119,6 +121,8 @@ public class TasksPresenter implements TasksContract.Presenter, LoaderManager.Lo
     @Override
     public void activeTask(Task task) {
         mTasksRepository.activeTask(task);
+
+        mTasksView.setAlarm(task);
         mTasksView.showTaskMarkedActive();
         loadTasks();
     }
@@ -131,12 +135,20 @@ public class TasksPresenter implements TasksContract.Presenter, LoaderManager.Lo
 
     @Override
     public void deleteAllTasks() {
+        if (mTasks != null) {
+            for (Task task : mTasks) {
+                if (task.isActive()) {
+                    mTasksView.cancelAlarm(task);
+                }
+            }
+        }
+
         mTasksRepository.deleteAllTasks();
         loadTasks();
     }
 
     @Override
-    public void openAddTaskUI()  {
+    public void openAddTaskUI() {
         mTasksView.showAddTaskUI();
     }
 

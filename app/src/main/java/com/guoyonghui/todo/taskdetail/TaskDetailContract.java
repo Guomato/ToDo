@@ -48,6 +48,10 @@ public interface TaskDetailContract {
 
         void showSuccessfullyEditTask();
 
+        void setAlarm(Task task);
+
+        void cancelAlarm(Task task);
+
         boolean isActive();
 
     }

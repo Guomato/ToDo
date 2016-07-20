@@ -147,7 +147,17 @@ public class TasksLocalDataSource implements TasksDataSource {
 
     @Override
     public void completeTask(String taskId) {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
+        ContentValues values = new ContentValues();
+        values.put(TaskEntry.COLUMN_NAME_COMPLETED, true);
+
+        String whereClause = TaskEntry.COLUMN_NAME_TASK_ENTRY + " like ?";
+        String[] whereArgs = {taskId};
+
+        db.update(TaskEntry.TABLE_NAME, values, whereClause, whereArgs);
+
+        db.close();
     }
 
     @Override
@@ -167,7 +177,17 @@ public class TasksLocalDataSource implements TasksDataSource {
 
     @Override
     public void activeTask(String taskId) {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
+        ContentValues values = new ContentValues();
+        values.put(TaskEntry.COLUMN_NAME_COMPLETED, false);
+
+        String whereClause = TaskEntry.COLUMN_NAME_TASK_ENTRY + " like ?";
+        String[] whereArgs = {taskId};
+
+        db.update(TaskEntry.TABLE_NAME, values, whereClause, whereArgs);
+
+        db.close();
     }
 
     @Override

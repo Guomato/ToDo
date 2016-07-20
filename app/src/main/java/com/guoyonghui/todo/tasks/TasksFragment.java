@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.guoyonghui.todo.R;
 import com.guoyonghui.todo.addedittask.AddEditTaskActivity;
+import com.guoyonghui.todo.alarm.AlarmReceiver;
 import com.guoyonghui.todo.data.Task;
 import com.guoyonghui.todo.taskdetail.TaskDetailActivity;
 
@@ -204,6 +205,16 @@ public class TasksFragment extends Fragment implements TasksContract.View {
     @Override
     public void showSuccessfullyAddTask() {
         showMessage(R.string.tip_task_add_success);
+    }
+
+    @Override
+    public void setAlarm(Task task) {
+        AlarmReceiver.setAlarm(getActivity(), task);
+    }
+
+    @Override
+    public void cancelAlarm(Task task) {
+        AlarmReceiver.cancelAlarm(getActivity(), task);
     }
 
     private void showMessage(String msg) {

@@ -74,17 +74,19 @@ public class AddEditTaskPresenter implements AddEditTaskContract.Presenter, Load
         } else {
             updateTask(task);
         }
+
+        mAddEditTaskView.setAlarm(task);
+
+        mAddEditTaskView.showTasksListUI();
     }
 
     private void updateTask(Task task) {
         task.setID(mTaskId);
         mTasksRepository.updateTask(task);
-        mAddEditTaskView.showTasksListUI();
     }
 
     private void createTask(Task task) {
         mTasksRepository.saveTask(task);
-        mAddEditTaskView.showTasksListUI();
     }
 
     private boolean isNewTask() {

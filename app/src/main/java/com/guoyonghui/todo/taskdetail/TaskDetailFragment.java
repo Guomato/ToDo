@@ -1,5 +1,6 @@
 package com.guoyonghui.todo.taskdetail;
 
+import android.app.AlarmManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 
 import com.guoyonghui.todo.R;
 import com.guoyonghui.todo.addedittask.AddEditTaskActivity;
+import com.guoyonghui.todo.alarm.AlarmReceiver;
+import com.guoyonghui.todo.data.Task;
 
 public class TaskDetailFragment extends Fragment implements TaskDetailContract.View {
 
@@ -201,6 +204,16 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     @Override
     public void showSuccessfullyEditTask() {
         showMessage(R.string.tip_task_edit_success);
+    }
+
+    @Override
+    public void setAlarm(Task task) {
+        AlarmReceiver.setAlarm(getActivity(), task);
+    }
+
+    @Override
+    public void cancelAlarm(Task task) {
+        AlarmReceiver.cancelAlarm(getActivity(), task);
     }
 
     @Override
