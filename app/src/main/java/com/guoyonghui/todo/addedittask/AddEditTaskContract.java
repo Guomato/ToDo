@@ -30,6 +30,8 @@ public interface AddEditTaskContract {
 
         void setAlarm(Task task);
 
+        void cancelAlarm(Task task);
+
         boolean isActive();
 
     }

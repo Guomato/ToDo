@@ -17,8 +17,12 @@ import com.guoyonghui.todo.taskdetail.TaskDetailActivity;
 import com.guoyonghui.todo.util.CalendarFormatHelper;
 
 import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class AlarmReceiver extends BroadcastReceiver {
+
+    private static final Map<String, PendingIntent> sPiMap = new LinkedHashMap<>();
 
     public static final String ACTION_TASK_ALARM = "com.guoyonghui.todo.alarm.ACTION_TASK_ALARM";
 
@@ -32,6 +36,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         if (ACTION_TASK_ALARM.equals(action)) {
             Task task = (Task) intent.getSerializableExtra(EXTRA_TASK);
+
+            if (sPiMap.containsKey(task.getID())) {
+                sPiMap.remove(task.getID());
+            }
 
             notify(context, task);
         }
@@ -70,12 +78,17 @@ public class AlarmReceiver extends BroadcastReceiver {
             return;
         }
 
+        cancelAlarm(context, task);
+
         Intent intent = new Intent(ACTION_TASK_ALARM);
         intent.putExtra(EXTRA_TASK, task);
 
-        PendingIntent pi = PendingIntent.getBroadcast(context.getApplicationContext(), task.hashCode(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pi = PendingIntent.getBroadcast(context.getApplicationContext(), task.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        sPiMap.put(task.getID(), pi);
 
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             am.setExact(AlarmManager.RTC_WAKEUP, triggerAtMills, pi);
         } else {
@@ -84,10 +97,10 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     public static void cancelAlarm(Context context, Task task) {
-        Intent intent = new Intent(ACTION_TASK_ALARM);
-        intent.putExtra(EXTRA_TASK, task);
-
-        PendingIntent pi = PendingIntent.getBroadcast(context.getApplicationContext(), task.hashCode(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        if (!sPiMap.containsKey(task.getID())) {
+            return;
+        }
+        PendingIntent pi = sPiMap.remove(task.getID());
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         am.cancel(pi);
     }

@@ -157,6 +157,11 @@ public class AddEditTaskFragment extends Fragment implements AddEditTaskContract
     }
 
     @Override
+    public void cancelAlarm(Task task) {
+        AlarmReceiver.cancelAlarm(getActivity(), task);
+    }
+
+    @Override
     public boolean isActive() {
         return isAdded();
     }

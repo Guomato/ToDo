@@ -68,6 +68,9 @@ public class TasksRepository implements TasksDataSource {
     public void updateTask(Task task) {
         mTasksLocalDataSource.updateTask(task);
 
+        if (mCachedTasks == null) {
+            refreshCache();
+        }
         mCachedTasks.put(task.getID(), task);
 
         notifyObservers();
