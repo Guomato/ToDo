@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">ToDo</string>
-    
+
     <string name="nav_item_todo">待办事项</string>
     <string name="nav_item_statistics">统计报表</string>
 
@@ -15,6 +15,7 @@
     <string name="action_filtering_active">未完成待办事项</string>
 
     <string name="title_hint">标题</string>
+    <string name="alarm_hint">请选择时间</string>
     <string name="description_hint">请输入待办事项内容</string>
 
 
@@ -26,6 +27,7 @@
     <string name="tip_task_add_success">已添加待办事项</string>
     <string name="tip_task_edit_success">已编辑待办事项</string>
     <string name="tip_no_task">无待办事项可用</string>
+    <string name="tip_alarm_illegal_error">非法的提醒时间</string>
     <string name="tip_empty_task_error">标题或描述之一不能为空</string>
 
     <string name="info_statistics_completed">已完成</string>

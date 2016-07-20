@@ -32,6 +32,8 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
 
     private TextView mTitleTextView;
 
+    private TextView mAlarmTextView;
+
     private TextView mDescriptionTextView;
 
     public static TaskDetailFragment newInstance(String taskId) {
@@ -60,6 +62,8 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
         mCompleteCheckBox = (CheckBox) rootView.findViewById(R.id.task_detail_complete);
 
         mTitleTextView = (TextView) rootView.findViewById(R.id.task_detail_title);
+
+        mAlarmTextView = (TextView) rootView.findViewById(R.id.task_detail_alarm);
 
         mDescriptionTextView = (TextView) rootView.findViewById(R.id.task_detail_description);
 
@@ -126,6 +130,17 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     }
 
     @Override
+    public void showAlarm(String alarm) {
+        mAlarmTextView.setVisibility(View.VISIBLE);
+        mAlarmTextView.setText(alarm);
+    }
+
+    @Override
+    public void hideAlarm() {
+        mAlarmTextView.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
     public void showDescription(String description) {
         mDescriptionTextView.setVisibility(View.VISIBLE);
         mDescriptionTextView.setText(description);
@@ -142,7 +157,7 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
         mCompleteCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mCompleteCheckBox.isChecked()) {
+                if (mCompleteCheckBox.isChecked()) {
                     mPresenter.completeTask(mTaskId);
                 } else {
                     mPresenter.activeTask(mTaskId);

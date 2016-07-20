@@ -7,7 +7,7 @@ public interface AddEditTaskContract {
 
     interface Presenter extends BasePresenter {
 
-        void finishAddEditTask(String title, String description);
+        void finishAddEditTask(String title, String description, String alarm);
 
     }
 
@@ -17,7 +17,11 @@ public interface AddEditTaskContract {
 
         void showDescription(String description);
 
+        void showAlarm(String alarm);
+
         void showNoTask();
+
+        void showAlarmIllegalError();
 
         void showEmptyTaskError();
 

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.util.Log;
 
 import com.guoyonghui.todo.data.Task;
 import com.guoyonghui.todo.data.source.TasksDataSource;
@@ -137,7 +136,7 @@ public class TasksPresenter implements TasksContract.Presenter, LoaderManager.Lo
     }
 
     @Override
-    public void openAddTaskUI() {
+    public void openAddTaskUI()  {
         mTasksView.showAddTaskUI();
     }
 

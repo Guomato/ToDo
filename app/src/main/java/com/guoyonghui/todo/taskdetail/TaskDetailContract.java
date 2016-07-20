@@ -28,6 +28,10 @@ public interface TaskDetailContract {
 
         void hideTitle();
 
+        void showAlarm(String alarm);
+
+        void hideAlarm();
+
         void showDescription(String description);
 
         void hideDescription();

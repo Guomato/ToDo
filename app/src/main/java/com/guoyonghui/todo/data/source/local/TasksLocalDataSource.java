@@ -37,6 +37,7 @@ public class TasksLocalDataSource implements TasksDataSource {
                 TaskEntry.COLUMN_NAME_TASK_ENTRY,
                 TaskEntry.COLUMN_NAME_TITLE,
                 TaskEntry.COLUMN_NAME_DESCRIPTION,
+                TaskEntry.COLUMN_NAME_ALARM,
                 TaskEntry.COLUMN_NAME_COMPLETED
         };
 
@@ -46,9 +47,10 @@ public class TasksLocalDataSource implements TasksDataSource {
                 String taskId = c.getString(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_TASK_ENTRY));
                 String title = c.getString(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_TITLE));
                 String description = c.getString(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_DESCRIPTION));
+                String alarm = c.getString(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_ALARM));
                 boolean completed = c.getInt(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_COMPLETED)) == 1;
 
-                Task task = new Task(taskId, title, description, completed);
+                Task task = new Task(taskId, title, description, alarm, completed);
                 tasks.add(task);
             }
         }
@@ -69,6 +71,7 @@ public class TasksLocalDataSource implements TasksDataSource {
                 TaskEntry.COLUMN_NAME_TASK_ENTRY,
                 TaskEntry.COLUMN_NAME_TITLE,
                 TaskEntry.COLUMN_NAME_DESCRIPTION,
+                TaskEntry.COLUMN_NAME_ALARM,
                 TaskEntry.COLUMN_NAME_COMPLETED
         };
         String selection = TaskEntry.COLUMN_NAME_TASK_ENTRY + " like ?";
@@ -80,9 +83,10 @@ public class TasksLocalDataSource implements TasksDataSource {
 
             String title = c.getString(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_TITLE));
             String description = c.getString(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_DESCRIPTION));
+            String alarm = c.getString(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_ALARM));
             boolean completed = c.getInt(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_COMPLETED)) == 1;
 
-            task = new Task(taskId, title, description, completed);
+            task = new Task(taskId, title, description, alarm, completed);
         }
         if (c != null) {
             c.close();
@@ -100,6 +104,7 @@ public class TasksLocalDataSource implements TasksDataSource {
         values.put(TaskEntry.COLUMN_NAME_TASK_ENTRY, task.getID());
         values.put(TaskEntry.COLUMN_NAME_TITLE, task.getTitle());
         values.put(TaskEntry.COLUMN_NAME_DESCRIPTION, task.getDescription());
+        values.put(TaskEntry.COLUMN_NAME_ALARM, task.getAlarm());
         values.put(TaskEntry.COLUMN_NAME_COMPLETED, task.isCompleted());
 
         db.insert(TaskEntry.TABLE_NAME, null, values);
@@ -114,6 +119,7 @@ public class TasksLocalDataSource implements TasksDataSource {
         ContentValues values = new ContentValues();
         values.put(TaskEntry.COLUMN_NAME_TITLE, task.getTitle());
         values.put(TaskEntry.COLUMN_NAME_DESCRIPTION, task.getDescription());
+        values.put(TaskEntry.COLUMN_NAME_ALARM, task.getAlarm());
         values.put(TaskEntry.COLUMN_NAME_COMPLETED, task.isCompleted());
 
         String whereClause = TaskEntry.COLUMN_NAME_TASK_ENTRY + " like ?";

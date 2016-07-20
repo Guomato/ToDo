@@ -15,6 +15,7 @@
     <string name="action_filtering_active">Active</string>
 
     <string name="title_hint">Title</string>
+    <string name="alarm_hint">Choose alarm</string>
     <string name="description_hint">Enter your TO-DO here.</string>
 
     <string name="title_new_todo">New ToDo</string>
@@ -25,6 +26,7 @@
     <string name="tip_task_add_success">Task has been added successfully.</string>
     <string name="tip_task_edit_success">Task has been edited successfully.</string>
     <string name="tip_no_task">No task found.</string>
+    <string name="tip_alarm_illegal_error">Illegal alarm.</string>
     <string name="tip_empty_task_error">Title or description can not be empty.</string>
 
     <string name="info_statistics_completed">Completed</string>

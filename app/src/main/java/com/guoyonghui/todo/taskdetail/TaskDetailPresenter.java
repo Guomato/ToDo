@@ -92,11 +92,18 @@ public class TaskDetailPresenter implements TaskDetailContract.Presenter, Loader
     private void showTask(Task task) {
         String title = task.getTitle();
         String description = task.getDescription();
+        String alarm = task.getAlarm();
 
         if (title == null || title.isEmpty()) {
             mTaskDetailView.hideTitle();
         } else {
             mTaskDetailView.showTitle(title);
+        }
+
+        if (alarm == null || alarm.isEmpty()) {
+            mTaskDetailView.hideAlarm();
+        } else {
+            mTaskDetailView.showAlarm(alarm);
         }
 
         if (description == null || description.isEmpty()) {

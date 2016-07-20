@@ -6,9 +6,8 @@ import android.support.v4.content.Loader;
 
 import com.guoyonghui.todo.data.Task;
 import com.guoyonghui.todo.data.source.TaskLoader;
-import com.guoyonghui.todo.data.source.TasksDataSource;
-import com.guoyonghui.todo.data.source.TasksLoader;
 import com.guoyonghui.todo.data.source.TasksRepository;
+import com.guoyonghui.todo.util.CalendarFormatHelper;
 
 public class AddEditTaskPresenter implements AddEditTaskContract.Presenter, LoaderManager.LoaderCallbacks<Task> {
 
@@ -41,7 +40,7 @@ public class AddEditTaskPresenter implements AddEditTaskContract.Presenter, Load
 
     @Override
     public void onLoadFinished(Loader<Task> loader, Task data) {
-        if(data != null) {
+        if (data != null) {
             showTask(data);
         }
     }
@@ -59,14 +58,18 @@ public class AddEditTaskPresenter implements AddEditTaskContract.Presenter, Load
     }
 
     @Override
-    public void finishAddEditTask(String title, String description) {
-        Task task = new Task(title, description);
-        if(task.isEmpty()) {
+    public void finishAddEditTask(String title, String description, String alarm) {
+        Task task = new Task(title, description, alarm);
+        if (!CalendarFormatHelper.isAlarmLegal(task.getAlarm())) {
+            mAddEditTaskView.showAlarmIllegalError();
+            return;
+        }
+        if (task.isEmpty()) {
             mAddEditTaskView.showEmptyTaskError();
             return;
         }
 
-        if(isNewTask()) {
+        if (isNewTask()) {
             createTask(task);
         } else {
             updateTask(task);
@@ -92,5 +95,6 @@ public class AddEditTaskPresenter implements AddEditTaskContract.Presenter, Load
     private void showTask(Task task) {
         mAddEditTaskView.showTitle(task.getTitle());
         mAddEditTaskView.showDescription(task.getDescription());
+        mAddEditTaskView.showAlarm(task.getAlarm());
     }
 }
