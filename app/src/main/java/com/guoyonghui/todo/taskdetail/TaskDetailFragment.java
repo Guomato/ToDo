@@ -119,6 +119,12 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     @Override
     public void showNoTask() {
         showMessage(R.string.tip_no_task);
+
+        hideTitle();
+        hideAlarm();
+        hideDescription();
+
+        getActivity().finish();
     }
 
     @Override
