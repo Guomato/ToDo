@@ -72,9 +72,9 @@ public class AlarmReceiver extends BroadcastReceiver {
             return;
         }
 
-        Log.d(TAG, "set alarm: " + task.getID().hashCode());
-
         cancelAlarm(context, task);
+
+        Log.d(TAG, "set alarm: " + task.getID().hashCode());
 
         Intent intent = new Intent(ACTION_TASK_ALARM);
         intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
