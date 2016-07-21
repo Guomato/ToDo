@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Vibrator;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 
 import com.guoyonghui.todo.R;
 import com.guoyonghui.todo.data.Task;
@@ -17,12 +18,10 @@ import com.guoyonghui.todo.taskdetail.TaskDetailActivity;
 import com.guoyonghui.todo.util.CalendarFormatHelper;
 
 import java.util.Calendar;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
-    private static final Map<String, PendingIntent> sPendingIntentMap = new LinkedHashMap<>();
+    private static final String TAG = AlarmReceiver.class.getSimpleName();
 
     public static final String ACTION_TASK_ALARM = "com.guoyonghui.todo.alarm.ACTION_TASK_ALARM";
 
@@ -36,11 +35,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         if (ACTION_TASK_ALARM.equals(action)) {
             Task task = (Task) intent.getSerializableExtra(EXTRA_TASK);
-
-            if (sPendingIntentMap.containsKey(task.getID())) {
-                sPendingIntentMap.remove(task.getID());
-            }
-
             notify(context, task);
         }
     }
@@ -78,17 +72,17 @@ public class AlarmReceiver extends BroadcastReceiver {
             return;
         }
 
+        Log.d(TAG, "set alarm: " + task.getID().hashCode());
+
         cancelAlarm(context, task);
 
         Intent intent = new Intent(ACTION_TASK_ALARM);
         intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         intent.putExtra(EXTRA_TASK, task);
 
-        PendingIntent pi = PendingIntent.getBroadcast(context.getApplicationContext(), task.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pi = PendingIntent.getBroadcast(context.getApplicationContext(), task.getID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        sPendingIntentMap.put(task.getID(), pi);
-
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager am = (AlarmManager) context.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             am.setExact(AlarmManager.RTC_WAKEUP, triggerAtMills, pi);
@@ -98,11 +92,15 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     public static void cancelAlarm(Context context, Task task) {
-        if (!sPendingIntentMap.containsKey(task.getID())) {
-            return;
-        }
-        PendingIntent pi = sPendingIntentMap.remove(task.getID());
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Log.d(TAG, "cancel alarm: " + task.getID().hashCode());
+
+        Intent intent = new Intent(ACTION_TASK_ALARM);
+        intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        intent.putExtra(EXTRA_TASK, task);
+
+        PendingIntent pi = PendingIntent.getBroadcast(context.getApplicationContext(), task.getID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager am = (AlarmManager) context.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         am.cancel(pi);
     }
 

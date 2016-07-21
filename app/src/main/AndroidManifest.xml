@@ -29,7 +29,10 @@
                 <action android:name="com.guoyonghui.todo.alarm.ACTION_TASK_ALARM"/>
             </intent-filter>
         </receiver>
-        <receiver android:name=".alarm.BootReceiver">
+        <receiver
+            android:name=".alarm.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
