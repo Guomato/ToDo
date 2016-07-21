@@ -95,7 +95,7 @@ public class Task implements Serializable {
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new Object[]{mID, mTitle, mDescription, mAlarm});
+        return Arrays.hashCode(new Object[]{mID, mTitle, mDescription});
     }
 
     @Override
@@ -105,8 +105,7 @@ public class Task implements Serializable {
         Task task = (Task) obj;
         return equals(mID, task.mID) &&
                 equals(mTitle, task.mTitle) &&
-                equals(mDescription, task.mDescription) &&
-                equals(mAlarm, task.mAlarm);
+                equals(mDescription, task.mDescription);
     }
 
     private boolean equals(Object a, Object b) {
