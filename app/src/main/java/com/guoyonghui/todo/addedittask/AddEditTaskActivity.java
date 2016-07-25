@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
-import com.guoyonghui.BaseActivity;
+import com.guoyonghui.todo.base.BaseActivity;
 import com.guoyonghui.todo.R;
 import com.guoyonghui.todo.data.source.TaskLoader;
 import com.guoyonghui.todo.data.source.TasksRepository;

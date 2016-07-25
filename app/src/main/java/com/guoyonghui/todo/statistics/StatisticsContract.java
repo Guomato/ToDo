@@ -1,7 +1,7 @@
 package com.guoyonghui.todo.statistics;
 
-import com.guoyonghui.todo.BasePresenter;
-import com.guoyonghui.todo.BaseView;
+import com.guoyonghui.todo.base.BasePresenter;
+import com.guoyonghui.todo.base.BaseView;
 
 public interface StatisticsContract {
 

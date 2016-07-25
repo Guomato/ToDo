@@ -1,9 +1,9 @@
-package com.guoyonghui;
+package com.guoyonghui.todo.base;
 
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 
-import com.guoyonghui.todo.BasePresenter;
+import com.guoyonghui.todo.base.BasePresenter;
 
 public abstract class BaseFragment extends Fragment {
 

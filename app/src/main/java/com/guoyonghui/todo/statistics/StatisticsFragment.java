@@ -7,8 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.guoyonghui.BaseFragment;
-import com.guoyonghui.todo.BasePresenter;
+import com.guoyonghui.todo.base.BaseFragment;
+import com.guoyonghui.todo.base.BasePresenter;
 import com.guoyonghui.todo.R;
 import com.guoyonghui.todo.view.StatisticsView;
 

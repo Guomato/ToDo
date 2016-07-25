@@ -1,7 +1,7 @@
 package com.guoyonghui.todo.taskdetail;
 
-import com.guoyonghui.todo.BasePresenter;
-import com.guoyonghui.todo.BaseView;
+import com.guoyonghui.todo.base.BasePresenter;
+import com.guoyonghui.todo.base.BaseView;
 import com.guoyonghui.todo.data.Task;
 
 public interface TaskDetailContract {

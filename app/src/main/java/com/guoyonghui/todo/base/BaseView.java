@@ -1,4 +1,4 @@
-package com.guoyonghui.todo;
+package com.guoyonghui.todo.base;
 
 public interface BaseView<T> {
 
