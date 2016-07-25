@@ -3,16 +3,16 @@ package com.guoyonghui.todo.statistics;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.guoyonghui.BaseFragment;
+import com.guoyonghui.todo.BasePresenter;
 import com.guoyonghui.todo.R;
 import com.guoyonghui.todo.view.StatisticsView;
 
-public class StatisticsFragment extends Fragment implements StatisticsContract.View {
+public class StatisticsFragment extends BaseFragment implements StatisticsContract.View {
 
     private StatisticsContract.Presenter mPresenter;
 
@@ -45,10 +45,8 @@ public class StatisticsFragment extends Fragment implements StatisticsContract.V
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        mPresenter.start();
+    protected BasePresenter getPresenter() {
+        return mPresenter;
     }
 
     @Override

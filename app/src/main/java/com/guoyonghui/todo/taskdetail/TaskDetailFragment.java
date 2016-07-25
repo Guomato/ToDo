@@ -1,12 +1,9 @@
 package com.guoyonghui.todo.taskdetail;
 
-import android.app.AlarmManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,12 +13,14 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.guoyonghui.BaseFragment;
+import com.guoyonghui.todo.BasePresenter;
 import com.guoyonghui.todo.R;
 import com.guoyonghui.todo.addedittask.AddEditTaskActivity;
 import com.guoyonghui.todo.alarm.AlarmReceiver;
 import com.guoyonghui.todo.data.Task;
 
-public class TaskDetailFragment extends Fragment implements TaskDetailContract.View {
+public class TaskDetailFragment extends BaseFragment implements TaskDetailContract.View {
 
     private static final String ARGUMENT_EXTRA_ID = "com.guoyonghui.todo.taskdetail.ARGUMENT_EXTRA_ID";
 
@@ -82,10 +81,8 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        mPresenter.start();
+    protected BasePresenter getPresenter() {
+        return mPresenter;
     }
 
     @Override
@@ -119,10 +116,6 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     @Override
     public void showNoTask() {
         showMessage(R.string.tip_no_task);
-
-        hideTitle();
-        hideAlarm();
-        hideDescription();
 
         getActivity().finish();
     }
@@ -225,13 +218,5 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     @Override
     public boolean isActive() {
         return isAdded();
-    }
-
-    private void showMessage(String msg) {
-        Snackbar.make(getView(), msg, Snackbar.LENGTH_SHORT).show();
-    }
-
-    private void showMessage(int msgResId) {
-        Snackbar.make(getView(), msgResId, Snackbar.LENGTH_SHORT).show();
     }
 }

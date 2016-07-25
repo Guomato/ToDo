@@ -3,17 +3,14 @@ package com.guoyonghui.todo.addedittask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.guoyonghui.BaseActivity;
 import com.guoyonghui.todo.R;
-import com.guoyonghui.todo.BaseApplication;
-import com.guoyonghui.todo.data.Task;
 import com.guoyonghui.todo.data.source.TaskLoader;
-import com.guoyonghui.todo.data.source.TasksLoader;
 import com.guoyonghui.todo.data.source.TasksRepository;
 
-public class AddEditTaskActivity extends AppCompatActivity {
+public class AddEditTaskActivity extends BaseActivity {
 
     public static final String EXTRA_TASK_ID = "com.guoyonghui.todo.addedittask.EXTRA_TASK_ID";
 
@@ -45,7 +42,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
                     .commit();
         }
 
-        TasksRepository tasksRepository = ((BaseApplication) getApplication()).getTasksRepository();
+        TasksRepository tasksRepository = getTasksRepository();
         TaskLoader taskLoader = new TaskLoader(this, tasksRepository, taskId);
         new AddEditTaskPresenter(taskId, tasksRepository, addEditTaskFragment, getSupportLoaderManager(), taskLoader);
     }

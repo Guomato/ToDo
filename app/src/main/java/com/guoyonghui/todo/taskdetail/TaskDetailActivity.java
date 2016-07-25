@@ -3,15 +3,14 @@ package com.guoyonghui.todo.taskdetail;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.guoyonghui.BaseActivity;
 import com.guoyonghui.todo.R;
-import com.guoyonghui.todo.BaseApplication;
 import com.guoyonghui.todo.data.source.TaskLoader;
 import com.guoyonghui.todo.data.source.TasksRepository;
 
-public class TaskDetailActivity extends AppCompatActivity {
+public class TaskDetailActivity extends BaseActivity {
 
     public static final String EXTRA_TASK_ID = "com.guoyonghui.todo.taskdetail.EXTRA_TASK_ID";
 
@@ -38,7 +37,7 @@ public class TaskDetailActivity extends AppCompatActivity {
                     .commit();
         }
 
-        TasksRepository tasksRepository = ((BaseApplication) getApplication()).getTasksRepository();
+        TasksRepository tasksRepository = getTasksRepository();
         TaskLoader taskLoader = new TaskLoader(this, tasksRepository, taskId);
         new TaskDetailPresenter(taskId, tasksRepository, taskDetailFragment, getSupportLoaderManager(), taskLoader);
     }

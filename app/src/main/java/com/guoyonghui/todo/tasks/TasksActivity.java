@@ -7,17 +7,16 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.guoyonghui.todo.BaseApplication;
+import com.guoyonghui.BaseActivity;
 import com.guoyonghui.todo.R;
 import com.guoyonghui.todo.data.source.TasksLoader;
 import com.guoyonghui.todo.data.source.TasksRepository;
 import com.guoyonghui.todo.statistics.StatisticsActivity;
 
-public class TasksActivity extends AppCompatActivity {
+public class TasksActivity extends BaseActivity {
 
     private static final String CURRENT_FILTERING_KEY = "com.guoyonghui.todo.tasks.CURRENT_FILTERING_KEY";
 
@@ -52,7 +51,7 @@ public class TasksActivity extends AppCompatActivity {
                     .commit();
         }
 
-        TasksRepository tasksRepository = ((BaseApplication)getApplication()).getTasksRepository();
+        TasksRepository tasksRepository = getTasksRepository();
         TasksLoader tasksLoader = new TasksLoader(this, tasksRepository);
 
         mPresenter = new TasksPresenter(tasksRepository, tasksFragment, getSupportLoaderManager(), tasksLoader);

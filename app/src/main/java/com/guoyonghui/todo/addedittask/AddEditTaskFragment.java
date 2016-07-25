@@ -6,8 +6,6 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +14,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.guoyonghui.BaseFragment;
+import com.guoyonghui.todo.BasePresenter;
 import com.guoyonghui.todo.R;
 import com.guoyonghui.todo.alarm.AlarmReceiver;
 import com.guoyonghui.todo.data.Task;
@@ -24,7 +24,7 @@ import com.guoyonghui.todo.util.CalendarFormatHelper;
 import java.util.Calendar;
 import java.util.Date;
 
-public class AddEditTaskFragment extends Fragment implements AddEditTaskContract.View, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class AddEditTaskFragment extends BaseFragment implements AddEditTaskContract.View, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private AddEditTaskContract.Presenter mPresenter;
 
@@ -85,10 +85,8 @@ public class AddEditTaskFragment extends Fragment implements AddEditTaskContract
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        mPresenter.start();
+    protected BasePresenter getPresenter() {
+        return mPresenter;
     }
 
     @Override
@@ -174,14 +172,6 @@ public class AddEditTaskFragment extends Fragment implements AddEditTaskContract
     private void showTimePicker() {
         TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), this, mCurrentCalendar.get(Calendar.HOUR_OF_DAY), mCurrentCalendar.get(Calendar.MINUTE), true);
         timePickerDialog.show();
-    }
-
-    private void showMessage(String msg) {
-        Snackbar.make(getView(), msg, Snackbar.LENGTH_SHORT).show();
-    }
-
-    private void showMessage(int msgResId) {
-        Snackbar.make(getView(), msgResId, Snackbar.LENGTH_SHORT).show();
     }
 
 }

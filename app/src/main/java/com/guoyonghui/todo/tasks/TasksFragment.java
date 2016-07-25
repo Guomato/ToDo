@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.guoyonghui.BaseFragment;
+import com.guoyonghui.todo.BasePresenter;
 import com.guoyonghui.todo.R;
 import com.guoyonghui.todo.addedittask.AddEditTaskActivity;
 import com.guoyonghui.todo.alarm.AlarmReceiver;
@@ -29,7 +29,7 @@ import com.guoyonghui.todo.taskdetail.TaskDetailActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TasksFragment extends Fragment implements TasksContract.View {
+public class TasksFragment extends BaseFragment implements TasksContract.View {
 
     public static final int REQUEST_ADD_TASK = 1;
 
@@ -70,10 +70,8 @@ public class TasksFragment extends Fragment implements TasksContract.View {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        mPresenter.start();
+    protected BasePresenter getPresenter() {
+        return mPresenter;
     }
 
     @Override
@@ -215,14 +213,6 @@ public class TasksFragment extends Fragment implements TasksContract.View {
     @Override
     public void cancelAlarm(Task task) {
         AlarmReceiver.cancelAlarm(getActivity(), task);
-    }
-
-    private void showMessage(String msg) {
-        Snackbar.make(getView(), msg, Snackbar.LENGTH_SHORT).show();
-    }
-
-    private void showMessage(int msgResId) {
-        Snackbar.make(getView(), msgResId, Snackbar.LENGTH_SHORT).show();
     }
 
     private TaskItemListener mTaskItemListener = new TaskItemListener() {

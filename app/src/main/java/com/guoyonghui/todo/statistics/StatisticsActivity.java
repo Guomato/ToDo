@@ -7,17 +7,16 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.guoyonghui.BaseActivity;
 import com.guoyonghui.todo.R;
-import com.guoyonghui.todo.BaseApplication;
 import com.guoyonghui.todo.data.source.TasksLoader;
 import com.guoyonghui.todo.data.source.TasksRepository;
 import com.guoyonghui.todo.tasks.TasksActivity;
 
-public class StatisticsActivity extends AppCompatActivity {
+public class StatisticsActivity extends BaseActivity {
 
     private DrawerLayout mDrawerLayout;
 
@@ -29,7 +28,7 @@ public class StatisticsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.statistics_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null){
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
             actionBar.setTitle(R.string.nav_item_statistics);
@@ -37,19 +36,19 @@ public class StatisticsActivity extends AppCompatActivity {
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.statistics_drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.statistics_nav_view);
-        if(navigationView != null) {
+        if (navigationView != null) {
             setupNavigationView(navigationView);
         }
 
         StatisticsFragment statisticsFragment = (StatisticsFragment) getSupportFragmentManager().findFragmentById(R.id.statistics_fragment_container);
-        if(statisticsFragment == null) {
+        if (statisticsFragment == null) {
             statisticsFragment = StatisticsFragment.newInstance();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.statistics_fragment_container, statisticsFragment)
                     .commit();
         }
 
-        TasksRepository tasksRepository = ((BaseApplication)getApplication()).getTasksRepository();
+        TasksRepository tasksRepository = getTasksRepository();
         TasksLoader tasksLoader = new TasksLoader(this, tasksRepository);
         new StatisticsPresenter(tasksRepository, statisticsFragment, getSupportLoaderManager(), tasksLoader);
     }
