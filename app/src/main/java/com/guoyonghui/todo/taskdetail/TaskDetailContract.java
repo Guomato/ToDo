@@ -28,9 +28,9 @@ public interface TaskDetailContract {
 
         void hideTitle();
 
-        void showAlarm(String alarm);
+        void showDate(String date);
 
-        void hideAlarm();
+        void hideDate();
 
         void showDescription(String description);
 
@@ -47,10 +47,6 @@ public interface TaskDetailContract {
         void showEditTaskUI(String taskId);
 
         void showSuccessfullyEditTask();
-
-        void setAlarm(Task task);
-
-        void cancelAlarm(Task task);
 
         boolean isActive();
 

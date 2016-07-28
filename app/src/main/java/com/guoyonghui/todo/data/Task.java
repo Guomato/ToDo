@@ -1,7 +1,10 @@
 package com.guoyonghui.todo.data;
 
+import com.guoyonghui.todo.util.DateHelper;
+
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.UUID;
 
 public class Task implements Serializable {
@@ -12,32 +15,39 @@ public class Task implements Serializable {
 
     private String mDescription;
 
-    private String mAlarm;
+    private String mDate;
 
     private boolean mCompleted;
 
-    public Task(String title, String description, String alarm) {
+    public Task(String title, String description) {
         mID = UUID.randomUUID().toString();
         mTitle = title;
         mDescription = description;
-        mAlarm = alarm;
+        mDate = DateHelper.format(new Date());
         mCompleted = false;
     }
 
-    public Task(String ID, String title, String description, String alarm) {
-        this(title, description, alarm);
+    public Task(String ID, String title, String description) {
+        this(title, description);
         mID = ID;
     }
 
-    public Task(String title, String description, String alarm, boolean completed) {
-        this(title, description, alarm);
+    public Task(String title, String description, boolean completed) {
+        this(title, description);
         mCompleted = completed;
     }
 
-    public Task(String ID, String title, String description, String alarm, boolean completed) {
-        this(title, description, alarm);
+    public Task(String ID, String title, String description, boolean completed) {
+        this(title, description);
         mID = ID;
         mCompleted = completed;
+    }
+
+    public Task(String ID, String title, String description, String date, boolean completed) {
+        this(title, description);
+        mID = ID;
+        mCompleted = completed;
+        mDate = date;
     }
 
     public String getID() {
@@ -80,12 +90,12 @@ public class Task implements Serializable {
         return (mTitle == null || mTitle.isEmpty()) || (mDescription == null || mDescription.isEmpty());
     }
 
-    public String getAlarm() {
-        return mAlarm;
+    public String getDate() {
+        return mDate;
     }
 
-    public void setAlarm(String alarm) {
-        mAlarm = alarm;
+    public void setDate(String date) {
+        mDate = date;
     }
 
     @Override

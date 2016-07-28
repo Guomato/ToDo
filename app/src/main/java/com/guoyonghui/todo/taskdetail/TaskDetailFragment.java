@@ -13,12 +13,10 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.guoyonghui.todo.base.BaseFragment;
-import com.guoyonghui.todo.base.BasePresenter;
 import com.guoyonghui.todo.R;
 import com.guoyonghui.todo.addedittask.AddEditTaskActivity;
-import com.guoyonghui.todo.alarm.AlarmReceiver;
-import com.guoyonghui.todo.data.Task;
+import com.guoyonghui.todo.base.BaseFragment;
+import com.guoyonghui.todo.base.BasePresenter;
 
 public class TaskDetailFragment extends BaseFragment implements TaskDetailContract.View {
 
@@ -34,7 +32,7 @@ public class TaskDetailFragment extends BaseFragment implements TaskDetailContra
 
     private TextView mTitleTextView;
 
-    private TextView mAlarmTextView;
+    private TextView mDateTextView;
 
     private TextView mDescriptionTextView;
 
@@ -65,7 +63,7 @@ public class TaskDetailFragment extends BaseFragment implements TaskDetailContra
 
         mTitleTextView = (TextView) rootView.findViewById(R.id.task_detail_title);
 
-        mAlarmTextView = (TextView) rootView.findViewById(R.id.task_detail_alarm);
+        mDateTextView = (TextView) rootView.findViewById(R.id.task_detail_date);
 
         mDescriptionTextView = (TextView) rootView.findViewById(R.id.task_detail_description);
 
@@ -132,14 +130,14 @@ public class TaskDetailFragment extends BaseFragment implements TaskDetailContra
     }
 
     @Override
-    public void showAlarm(String alarm) {
-        mAlarmTextView.setVisibility(View.VISIBLE);
-        mAlarmTextView.setText(alarm);
+    public void showDate(String date) {
+        mDateTextView.setVisibility(View.VISIBLE);
+        mDateTextView.setText(date);
     }
 
     @Override
-    public void hideAlarm() {
-        mAlarmTextView.setVisibility(View.INVISIBLE);
+    public void hideDate() {
+        mDateTextView.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -203,16 +201,6 @@ public class TaskDetailFragment extends BaseFragment implements TaskDetailContra
     @Override
     public void showSuccessfullyEditTask() {
         showMessage(R.string.tip_task_edit_success);
-    }
-
-    @Override
-    public void setAlarm(Task task) {
-        AlarmReceiver.setAlarm(getActivity(), task);
-    }
-
-    @Override
-    public void cancelAlarm(Task task) {
-        AlarmReceiver.cancelAlarm(getActivity(), task);
     }
 
     @Override

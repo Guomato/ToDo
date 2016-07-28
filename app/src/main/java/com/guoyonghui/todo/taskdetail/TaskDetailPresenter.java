@@ -65,7 +65,6 @@ public class TaskDetailPresenter implements TaskDetailContract.Presenter, Loader
     public void completeTask(String taskId) {
         mTasksRepository.completeTask(taskId);
 
-        mTaskDetailView.cancelAlarm(mTask);
         mTaskDetailView.showTaskMarkedCompleted();
     }
 
@@ -73,7 +72,6 @@ public class TaskDetailPresenter implements TaskDetailContract.Presenter, Loader
     public void activeTask(String taskId) {
         mTasksRepository.activeTask(taskId);
 
-        mTaskDetailView.setAlarm(mTask);
         mTaskDetailView.showTaskMarkedActive();
     }
 
@@ -81,7 +79,6 @@ public class TaskDetailPresenter implements TaskDetailContract.Presenter, Loader
     public void deleteTask(String taskId) {
         mTasksRepository.deleteTask(taskId);
 
-        mTaskDetailView.cancelAlarm(mTask);
         mTaskDetailView.showTaskDeleted();
     }
 
@@ -102,7 +99,7 @@ public class TaskDetailPresenter implements TaskDetailContract.Presenter, Loader
     private void showTask(Task task) {
         String title = task.getTitle();
         String description = task.getDescription();
-        String alarm = task.getAlarm();
+        String date = task.getDate();
 
         if (title == null || title.isEmpty()) {
             mTaskDetailView.hideTitle();
@@ -110,10 +107,10 @@ public class TaskDetailPresenter implements TaskDetailContract.Presenter, Loader
             mTaskDetailView.showTitle(title);
         }
 
-        if (alarm == null || alarm.isEmpty()) {
-            mTaskDetailView.hideAlarm();
+        if (date == null || date.isEmpty()) {
+            mTaskDetailView.hideDate();
         } else {
-            mTaskDetailView.showAlarm(alarm);
+            mTaskDetailView.showDate(date);
         }
 
         if (description == null || description.isEmpty()) {

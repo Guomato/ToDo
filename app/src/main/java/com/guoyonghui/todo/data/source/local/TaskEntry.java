@@ -9,6 +9,6 @@ public final class TaskEntry implements BaseColumns {
     public static final String COLUMN_NAME_TITLE = "title";
     public static final String COLUMN_NAME_DESCRIPTION = "description";
     public static final String COLUMN_NAME_COMPLETED = "completed";
-    public static final String COLUMN_NAME_ALARM = "alarm";
+    public static final String COLUMN_NAME_DATE = "date";
 
 }

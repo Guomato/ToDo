@@ -15,7 +15,6 @@
     <string name="action_filtering_active">未完成待办事项</string>
 
     <string name="title_hint">标题</string>
-    <string name="alarm_hint">请选择时间</string>
     <string name="description_hint">请输入待办事项内容</string>
 
 
@@ -34,4 +33,7 @@
     <string name="info_statistics_active">待办</string>
 
     <string name="loading_indicator">正在加载</string>
+
+    <string name="action_detail">详情</string>
+    <string name="action_share">分享</string>
 </resources>

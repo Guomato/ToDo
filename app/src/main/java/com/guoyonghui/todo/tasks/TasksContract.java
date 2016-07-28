@@ -60,10 +60,6 @@ public interface TasksContract {
 
         void showLoadingIndicator(boolean show);
 
-        void setAlarm(Task task);
-
-        void cancelAlarm(Task task);
-
     }
 
 }

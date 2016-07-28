@@ -7,6 +7,8 @@
     android:layout_marginEnd="@dimen/card_horizontal_margin"
     android:layout_marginStart="@dimen/card_horizontal_margin"
     android:layout_marginTop="@dimen/card_vertical_margin"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground"
     android:minHeight="@dimen/card_min_height"
     app:cardBackgroundColor="@android:color/white"
     app:contentPadding="@dimen/card_padding">
@@ -46,7 +48,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
             <TextView
-                android:id="@+id/alarm"
+                android:id="@+id/date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"

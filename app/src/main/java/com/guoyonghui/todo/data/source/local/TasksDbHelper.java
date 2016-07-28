@@ -23,7 +23,7 @@ public class TasksDbHelper extends SQLiteOpenHelper {
                     TaskEntry.COLUMN_NAME_TASK_ENTRY + TEXT_TYPE + " primary key" + SEPERATOR +
                     TaskEntry.COLUMN_NAME_TITLE + TEXT_TYPE + SEPERATOR +
                     TaskEntry.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + SEPERATOR +
-                    TaskEntry.COLUMN_NAME_ALARM + TEXT_TYPE + SEPERATOR +
+                    TaskEntry.COLUMN_NAME_DATE + TEXT_TYPE + SEPERATOR +
                     TaskEntry.COLUMN_NAME_COMPLETED + BOOL_TYPE + ")";
 
     public TasksDbHelper(Context context) {

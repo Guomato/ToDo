@@ -18,11 +18,10 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.guoyonghui.todo.base.BaseFragment;
-import com.guoyonghui.todo.base.BasePresenter;
 import com.guoyonghui.todo.R;
 import com.guoyonghui.todo.addedittask.AddEditTaskActivity;
-import com.guoyonghui.todo.alarm.AlarmReceiver;
+import com.guoyonghui.todo.base.BaseFragment;
+import com.guoyonghui.todo.base.BasePresenter;
 import com.guoyonghui.todo.data.Task;
 import com.guoyonghui.todo.taskdetail.TaskDetailActivity;
 
@@ -205,16 +204,6 @@ public class TasksFragment extends BaseFragment implements TasksContract.View {
         showMessage(R.string.tip_task_add_success);
     }
 
-    @Override
-    public void setAlarm(Task task) {
-        AlarmReceiver.setAlarm(getActivity(), task);
-    }
-
-    @Override
-    public void cancelAlarm(Task task) {
-        AlarmReceiver.cancelAlarm(getActivity(), task);
-    }
-
     private TaskItemListener mTaskItemListener = new TaskItemListener() {
         @Override
         public void onTaskClick(Task task) {
@@ -264,13 +253,13 @@ public class TasksFragment extends BaseFragment implements TasksContract.View {
             View rootView = viewHolder.root;
             CheckBox complete = viewHolder.complete;
             TextView title = viewHolder.title;
-            TextView alarm = viewHolder.alarm;
+            TextView date = viewHolder.date;
             TextView description = viewHolder.description;
 
             final Task task = mTasks.get(position);
 
             title.setText(task.getTitle());
-            alarm.setText(task.getAlarm());
+            date.setText(task.getDate());
             description.setText(task.getDescription());
 
             complete.setChecked(task.isCompleted());
@@ -306,7 +295,7 @@ public class TasksFragment extends BaseFragment implements TasksContract.View {
 
             TextView title;
 
-            TextView alarm;
+            TextView date;
 
             TextView description;
 
@@ -316,7 +305,7 @@ public class TasksFragment extends BaseFragment implements TasksContract.View {
                 root = itemView;
                 complete = (CheckBox) root.findViewById(R.id.complete);
                 title = (TextView) root.findViewById(R.id.title);
-                alarm = (TextView) root.findViewById(R.id.alarm);
+                date = (TextView) root.findViewById(R.id.date);
                 description = (TextView) root.findViewById(R.id.description);
             }
         }

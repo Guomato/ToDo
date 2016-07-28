@@ -7,7 +7,6 @@ import android.support.v4.content.Loader;
 import com.guoyonghui.todo.data.Task;
 import com.guoyonghui.todo.data.source.TaskLoader;
 import com.guoyonghui.todo.data.source.TasksRepository;
-import com.guoyonghui.todo.util.CalendarFormatHelper;
 
 public class AddEditTaskPresenter implements AddEditTaskContract.Presenter, LoaderManager.LoaderCallbacks<Task> {
 
@@ -58,12 +57,8 @@ public class AddEditTaskPresenter implements AddEditTaskContract.Presenter, Load
     }
 
     @Override
-    public void finishAddEditTask(String title, String description, String alarm) {
-        Task task = new Task(title, description, alarm);
-        if (!CalendarFormatHelper.isAlarmLegal(task.getAlarm())) {
-            mAddEditTaskView.showAlarmIllegalError();
-            return;
-        }
+    public void finishAddEditTask(String title, String description) {
+        Task task = new Task(title, description);
         if (task.isEmpty()) {
             mAddEditTaskView.showEmptyTaskError();
             return;
@@ -74,8 +69,6 @@ public class AddEditTaskPresenter implements AddEditTaskContract.Presenter, Load
         } else {
             updateTask(task);
         }
-
-        mAddEditTaskView.setAlarm(task);
 
         mAddEditTaskView.showTasksListUI();
     }
@@ -97,6 +90,5 @@ public class AddEditTaskPresenter implements AddEditTaskContract.Presenter, Load
     private void showTask(Task task) {
         mAddEditTaskView.showTitle(task.getTitle());
         mAddEditTaskView.showDescription(task.getDescription());
-        mAddEditTaskView.showAlarm(task.getAlarm());
     }
 }
